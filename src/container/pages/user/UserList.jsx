@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteUser, getAllRolePermission, getAllUsers } from "../../../redux";
+import { deleteUser, getAllRolePermission, getAllUsers, getSingleUsers } from "../../../redux";
 import { toast } from "react-toastify";
 // import "./RolePermissionList.css";
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -21,7 +22,7 @@ const UserList = () => {
   let navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllUsers()).then((res) => {
-      if (res.payload.data.status == 200) {
+      if (res?.payload?.data?.status == 200) {
         setUserList(res?.payload?.data?.users);
       }
     });
@@ -30,21 +31,29 @@ const UserList = () => {
   const handleDelete=(id)=>{
       console.log(id,"oo")
     dispatch(deleteUser(id)).then((res)=>{if(res?.payload?.data?.status==200){
-        toast.success(res.payload.data.message)
+        toast.success(res?.payload?.data?.message)
         dispatch(getAllUsers()).then((res) => {
-          if (res.payload.data.status == 200) {
+          if (res?.payload?.data?.status == 200) {
             setUserList(res?.payload?.data?.users);
           }
         });
 
     }})
   }
+
+
+  const handleEdit=(user)=>{
+    console.log(user)
+    // dispatch(getSingleUsers(id)).then((res)=>console.log(res,789))
+    navigate("/admin/dashboard/add-user",{state:user})
+  }
   return (
     <>
       <Box className="Role-Div">
       <Box className="add-role-box">
-    <Button onClick={()=>navigate("/admin/dashboard/add-user")} type="button" variant="contained">
-            Add User
+        <TextField sx={{width:"50%"}}  placeholder="Search"  type="search"  size="small"   />
+    <Button onClick={()=>navigate("/admin/dashboard/add-user")} type="button" className="add-btnaa" variant="contained">
+           <ControlPointIcon/>&nbsp; Add User
           </Button>
         </Box>
 
@@ -58,6 +67,7 @@ const UserList = () => {
                   <TableCell align="right">USERNAME</TableCell>
                   <TableCell align="right">EMAIL</TableCell>
                   <TableCell align="right">MOBILE</TableCell>
+                  <TableCell align="right">ROLE TYPE</TableCell>
                   <TableCell align="right">ACTION</TableCell>
 
                   {/* <TableCell align="right">DELETE</TableCell>
@@ -66,22 +76,23 @@ const UserList = () => {
               </TableHead>
               <TableBody>
                 {userList?.map((user, index) => (
-                  <TableRow key={user._id}>
+                  <TableRow key={user?._id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell align="right">image</TableCell>
-                    <TableCell align="right">{user.name}</TableCell>
-                    <TableCell align="right">{user.email}</TableCell>
-                    <TableCell align="right">{user.mobile}</TableCell>
+                    <TableCell align="right">{user?.name}</TableCell>
+                    <TableCell align="right">{user?.email}</TableCell>
+                    <TableCell align="right">{user?.mobile}</TableCell>
+                    <TableCell align="right">{user?.rolePermission?.role_name||"user"}</TableCell>
                     <TableCell align="right">
                       <Button variant="contained">
                         <VisibilityIcon />
                       </Button>
                       &nbsp;&nbsp;
-                      <Button variant="contained">
+                      <Button variant="contained" onClick={()=>handleEdit(user)}>
                         <EditIcon />
                       </Button>
                       &nbsp;&nbsp;
-                      <Button variant="contained" onClick={()=>handleDelete(user._id)} color="error">
+                      <Button variant="contained" onClick={()=>handleDelete(user?._id)} color="error">
                         <DeleteIcon />
                       </Button>
                     </TableCell>

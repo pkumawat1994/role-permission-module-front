@@ -3,14 +3,15 @@ import { API } from "../config/Api";
 import { dataService } from "../config/DataService";
 
 export const getAllRolePermission = createAsyncThunk(
-  "fetchRole",
+  "getAllRolePermission",
   async (_, { rejectWithValue }) => {
     try {
       const rolePermission_response = await dataService.get(
         API.GET_ROLES_PERMISSION
       );
-      console.log("resppnseee_Api", rolePermission_response);
-      if (rolePermission_response.status === 200) {
+
+      console.log("rolePermission_response", rolePermission_response);
+      if (rolePermission_response?.status === 200) {
         return rolePermission_response;
       }
     } catch (err) {
@@ -28,7 +29,7 @@ export const getAllUsers = createAsyncThunk(
           API.GET_ALL_USERS
         );
         console.log("allUser_response", allUser_response);
-        if (allUser_response.status === 200) {
+        if (allUser_response?.status === 200) {
           return allUser_response;
         }
       } catch (err) {
@@ -37,7 +38,24 @@ export const getAllUsers = createAsyncThunk(
     }
   );
 
+  export const getSingleUsers = createAsyncThunk(
+    "getSingleUsers",
+    async (id, { rejectWithValue }) => {
+      try {
+        const User_response = await dataService.get(
+          `${API.GET_SINGLE_USER}/${id}`
+        );
+        console.log("User_response", User_response);
+        if (User_response?.status === 200) {
+          return User_response;
+        }
+      } catch (err) {
+        rejectWithValue(err);
+      }
+    }
+  );
 
+  
 
   export const addRolePermission = createAsyncThunk(
     "addRolePermission",
@@ -87,6 +105,26 @@ export const getAllUsers = createAsyncThunk(
         console.log("delete_USER", delete_user);
         if (delete_user.status === 200) {
           return delete_user;
+        }
+      } catch (err) {
+        console.log(err.message,"err")
+        rejectWithValue(err);
+      }
+    }
+  );
+
+
+  export const UpdateUser = createAsyncThunk(
+    "UpdateUser",
+    async (data, { rejectWithValue }) => {
+      debugger;
+      console.log(data,"updateCommingData")
+      try {
+        // let id=data?.id; 
+        const update_user = await dataService.put(`${API.UPDATE_USER}/${"sdfsdf"}`,data);
+        console.log("update_USER", update_user);
+        if (update_user.status === 200) {
+          return update_user;
         }
       } catch (err) {
         console.log(err.message,"err")

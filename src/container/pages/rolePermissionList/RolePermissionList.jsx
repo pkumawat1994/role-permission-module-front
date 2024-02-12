@@ -149,6 +149,7 @@ const RolePermissionList = () => {
     initialValues: {
       role_name: "",
       attendance: {
+        module_access:false,
         all: false,
         create: false,
         update: false,
@@ -156,6 +157,7 @@ const RolePermissionList = () => {
         view: false,
       },
       user: {
+        module_access:false,
         all: false,
         create: false,
         update: false,
@@ -163,6 +165,7 @@ const RolePermissionList = () => {
         view: false,
       },
       task: {
+        module_access:false,
         all: false,
         create: false,
         update: false,
@@ -173,9 +176,9 @@ const RolePermissionList = () => {
     onSubmit: (values) => {
       console.log(values);
       dispatch(addRolePermission(values)).then((res)=>{
-        if(res.payload.status==201){
-          console.log(res.payload.data.message,"ress")
-          toast.success(res.payload.data.message)
+        if(res?.payload?.status==201){
+          console.log(res?.payload?.data?.message,"ress")
+          toast.success(res?.payload?.data?.message)
         }
       })
       
@@ -211,7 +214,22 @@ const RolePermissionList = () => {
                 <TableBody>
                   {/* {roles.map((role, index) => ( */}
                   <TableRow>
+
+                    {/* Attedence */}
                     <TableCell>{"attendance"}</TableCell>
+
+                    <TableCell align="right">
+                      {"module_access"}&nbsp;&nbsp;
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formik.values.attendance.module_access}
+                            onChange={handleCheckboxChange}
+                            name="attendance.module_access"
+                          />
+                        }
+                      />
+                    </TableCell>
 
                     <TableCell align="right">
                       {"All"}&nbsp;&nbsp;
@@ -285,6 +303,19 @@ const RolePermissionList = () => {
                     <TableCell>{"User"}</TableCell>
 
                     <TableCell align="right">
+                      {"module_access"}&nbsp;&nbsp;
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formik.values.user.module_access}
+                            onChange={handleCheckboxChange}
+                            name="user.module_access"
+                          />
+                        }
+                      />
+                    </TableCell>
+
+                    <TableCell align="right">
                       {"All"}&nbsp;&nbsp;
                       <FormControlLabel
                         control={
@@ -350,10 +381,23 @@ const RolePermissionList = () => {
                     </TableCell>
                   </TableRow>
 
-                  {/* MANAGEMENT */}
+                  {/* Task */}
 
                   <TableRow>
                     <TableCell>{"Task"}</TableCell>
+
+                    <TableCell align="right">
+                      {"module_access"}&nbsp;&nbsp;
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formik.values.task.module_access}
+                            onChange={handleCheckboxChange}
+                            name="task.module_access"
+                          />
+                        }
+                      />
+                    </TableCell>
 
                     <TableCell align="right">
                       {"All"}&nbsp;&nbsp;
@@ -421,6 +465,9 @@ const RolePermissionList = () => {
                     </TableCell>
                   </TableRow>
                   {/* ))} */}
+
+
+
                 </TableBody>
               </Table>
             </TableContainer>
