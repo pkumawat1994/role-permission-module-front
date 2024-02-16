@@ -1,6 +1,7 @@
 let ADMIN="admin";
 let USER="user";
 export const API={
+    LOGIN:`${USER}/login-user`,
     GET_ROLES_PERMISSION:`${ADMIN}/get-all-role-permission`,
     GET_ALL_USERS:`${USER}/get-user`,
     GET_SINGLE_USER:`${USER}/get-single-user`,
